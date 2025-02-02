@@ -3,8 +3,9 @@ import mongoose from 'mongoose';
 
 
 export const getAllExpense = async (req,res)=>{
+    console.log("REQ",req.body)
     try{
-      const expenses = await MoneyManager.find({});
+      const expenses = await MoneyManager.find({ userId: req.body.userId });
       res.status(200).json({success:true,data:expenses});
     }catch(error){
         res.status(200).json({success:false,message:'Server Error'});

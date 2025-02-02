@@ -11,6 +11,10 @@ const HomePage = () => {
   const [isEditing, setIsEditing] = useState(false); // Track if editing
   const [currentItem, setCurrentItem] = useState({ title: '', price: '', catagory: '' });
 
+  const authToken = localStorage.getItem('token')
+  const userId=localStorage.getItem('userId')
+
+
   // Open modal for adding or updating
   const handleShowModal = (item = null) => {
     setIsEditing(!!item); // If item exists, set to edit mode
@@ -57,8 +61,19 @@ const HomePage = () => {
   const [error, setError] = useState(null);
 
   const getAllExpenseApiCall = async () => {
+    let formData ={
+       "userId":userId
+    }
     try {
-      const response = await fetch('/api/expense'); // Replace with your API URL
+      const response = await fetch('/api/expense/all', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(formData)
+      }); 
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -72,14 +87,17 @@ const HomePage = () => {
   };
 
   const createExpenseApiCall = async (formData) => {
+    
+
     try {
       setLoading(true);
       const response = await fetch('/api/expense', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
-        body: JSON.stringify(formData), // Send formData as JSON
+        body: JSON.stringify({...formData,"userId":userId}), // Send formData as JSON
       });
 
       if (!response.ok) {
@@ -112,6 +130,7 @@ const HomePage = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         }
       });
 

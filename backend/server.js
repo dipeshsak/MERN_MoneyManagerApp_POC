@@ -4,6 +4,8 @@ import path from 'path';
 import { connectDB } from './config/db.js'
 
 import mmRoutes from './routes/moneymanager.route.js'
+import userRoutes from './routes/user.route.js'
+
 dotenv.config()
 
 
@@ -17,6 +19,8 @@ const __dirname = path.resolve();
 app.use(express.json()); //allows us to accepts json
 
 app.use("/api/expense",mmRoutes)
+app.use("/api/user",userRoutes)
+
 
 console.log("NODE ENV",process.env.NODE_ENV)
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "development") {
